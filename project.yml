@@ -1,0 +1,104 @@
+name: gameday
+
+options:
+  bundleIdPrefix: codes.ruben
+  deploymentTarget:
+    iOS: "17.0"
+    macOS: "26.5"
+    visionOS: "26.5"
+  developmentLanguage: en
+
+# Settings shared by every target.
+settings:
+  base:
+    DEVELOPMENT_TEAM: FG7AYYTX96
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: 1
+    SWIFT_VERSION: "5.0"
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+    SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    STRING_CATALOG_GENERATE_SYMBOLS: YES
+    GENERATE_INFOPLIST_FILE: YES
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  gameday:
+    type: application
+    # Multi-platform app (SDKROOT=auto). The widget extension is iOS-only.
+    supportedDestinations: [iOS, macOS, visionOS]
+    sources:
+      - path: gameday
+        excludes: [Info.plist, "*.entitlements"]   # referenced via build settings, not bundled
+      - path: Shared
+    dependencies:
+      # Widget is multi-platform too, so embed it on every destination the app supports.
+      - target: widgetExtension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: codes.ruben.gameday
+        INFOPLIST_FILE: gameday/Info.plist
+        # App Sandbox needs an explicit network-client grant on macOS, otherwise the
+        # schedule fetch is blocked. Scoped to macOS — iOS doesn't use the sandbox.
+        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": gameday/gameday-macOS.entitlements
+        TARGETED_DEVICE_FAMILY: "1,2,7"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ENABLE_APP_SANDBOX: YES
+        ENABLE_HARDENED_RUNTIME: YES
+        ENABLE_USER_SELECTED_FILES: readonly
+        REGISTER_APP_GROUPS: YES
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        "INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]": YES
+        "INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]": YES
+        "INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]": YES
+        "INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]": YES
+        "INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]": YES
+        "INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]": YES
+        "INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]": UIStatusBarStyleDefault
+        "INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]": UIStatusBarStyleDefault
+
+  widgetExtension:
+    type: app-extension
+    supportedDestinations: [iOS, macOS, visionOS]
+    sources:
+      - path: widget
+        excludes: [Info.plist, "*.entitlements"]
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: codes.ruben.gameday.widget
+        INFOPLIST_FILE: widget/Info.plist
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SKIP_INSTALL: YES
+        # macOS widget extensions must be sandboxed to register, and need a network
+        # grant to fetch the schedule. Scoped to macOS — iOS extensions are sandboxed already.
+        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": widget/widget-macOS.entitlements
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: WidgetBackground
+        INFOPLIST_KEY_CFBundleDisplayName: widget
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+
+# Explicit schemes so `xcodebuild -scheme …` works right after generation.
+schemes:
+  gameday:
+    build:
+      targets:
+        gameday: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    archive:
+      config: Release
+  widgetExtension:
+    build:
+      targets:
+        widgetExtension: all
+    run:
+      config: Debug
+    archive:
+      config: Release

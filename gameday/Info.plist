@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>codes.ruben.gameday</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>gameday</string>
+			</array>
+		</dict>
+	</array>
+	<!-- Names Siri accepts in the \(.applicationName) slot of App Shortcut phrases,
+	     so users can say natural variants instead of only the exact display name. -->
+	<key>INAlternativeAppNames</key>
+	<array>
+		<dict>
+			<key>INAlternativeAppName</key>
+			<string>Gameday</string>
+		</dict>
+		<dict>
+			<key>INAlternativeAppName</key>
+			<string>Game Day</string>
+		</dict>
+		<dict>
+			<key>INAlternativeAppName</key>
+			<string>Ballgame</string>
+		</dict>
+	</array>
+</dict>
+</plist>
