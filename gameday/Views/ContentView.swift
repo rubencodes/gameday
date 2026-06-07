@@ -126,7 +126,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $isDatePickerPresented) {
-                DatePickerSheet(viewModel: viewModel, isPresented: $isDatePickerPresented)
+                DatePickerSheet(viewModel: viewModel, isPresented: $isDatePickerPresented, accent: theme.accent(for: colorScheme))
             }
             .task(id: viewModel.taskId(filterId: filter.id)) {
                 await viewModel.load(filter: filter, cache: cache, in: modelContext)

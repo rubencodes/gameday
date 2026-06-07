@@ -3,14 +3,18 @@ import SwiftUI
 struct DatePickerSheet: View {
     let viewModel: GamedayViewModel
     @Binding var isPresented: Bool
+    /// Team/venue accent, passed in because a sheet gets a fresh environment and
+    /// doesn't inherit the app's ambient .tint.
+    let accent: Color
 
     // Edit a local draft so navigating months doesn't trigger reloads, and so
     // Cancel can discard without committing anything.
     @State private var draft: Date
 
-    init(viewModel: GamedayViewModel, isPresented: Binding<Bool>) {
+    init(viewModel: GamedayViewModel, isPresented: Binding<Bool>, accent: Color) {
         self.viewModel = viewModel
         self._isPresented = isPresented
+        self.accent = accent
         self._draft = State(initialValue: viewModel.selectedDate)
     }
 
@@ -42,6 +46,7 @@ struct DatePickerSheet: View {
                 }
             }
         }
+        .tint(accent)   // color the selected day + month chevrons to match the app
         .mediumSheetDetent()
     }
 }
