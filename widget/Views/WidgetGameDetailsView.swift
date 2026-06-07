@@ -16,7 +16,7 @@ struct WidgetGameDetailsView: View {
                     .minimumScaleFactor(0.8)
             }
             if let time = game.gameTime {
-                Text(game.gameState == .live ? "LIVE" : time)
+                Text(game.gameState == .live ? "NOW PLAYING" : time)
                     .font(.caption2)
                     .foregroundStyle(game.gameState == .live ? Color.red : Color.secondary)
             }

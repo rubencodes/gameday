@@ -10,7 +10,7 @@ struct GameStatusBadge: View {
                 switch gameState {
                 case .live:
                     Circle().fill(.red).frame(width: 7, height: 7)
-                    Text("LIVE").foregroundStyle(.red)
+                    Text("NOW PLAYING").foregroundStyle(.red)
                 case .final:
                     Text("Final · \(time)").foregroundStyle(.secondary)
                 default:
